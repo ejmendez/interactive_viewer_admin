@@ -1,2 +1,0 @@
-# interactive_viewer_admin
-interactive_viewer_admin
