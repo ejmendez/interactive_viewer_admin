@@ -4,13 +4,13 @@
     <title>Color Picker Example</title>
     <style>
         body {
-            margin: 0;
+             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: auto; /* Enable vertical scroll bar when content overflows */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Ensure the body takes at least the full viewport height */
             background-color: #f0f0f0;
         }
 
@@ -19,6 +19,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            flex-grow: 1; /* Allow the menu to expand to fit available space */
         }
 
         .startButton {
@@ -28,8 +29,8 @@
             border         : 2px solid #ff5500; /* Establece los bordes sólidos */
             border-radius  : 40px; /* Establece los bordes redondeados */
             color          : black; /* Establece el color del texto */
-            font-size      : 6em;/* Establece el tamaño de la fuente */
-            padding        : 10px 20px; /* Establece el espaciado interno */
+             font-size: 4vw; /* Use viewport width for font size */
+             padding: 1vw 2vw; /* Use viewport width for padding */
             text-align     : center; /* Centra el texto */
             text-decoration: none; /* Quita la decoración debajo del texto */
             transition     : all 0.3s ease; /* Añade una transición suave */
@@ -40,10 +41,24 @@
         .startButton2 {
             background     : black; /* Crea un degradado */
             color          : black; /* Establece el color del texto */
-            font-size      : 6em;/* Establece el tamaño de la fuente */
+            font-size: 4vw; /* Use viewport width for font size */
             border-color   : white;
         }
 
+        /* Add new styles for the text field */
+        #textField {
+            margin: 10px;
+            padding: 10px;
+            font-size: 2vw;
+            border: 2px solid #000;
+            border-radius: 10px;
+        }
+
+        .text_sent {
+            color          : white; /* Establece el color del texto */
+            font-size: 2vw; /* Use viewport width for font size */
+            border-color   : white;
+        }
 
     </style>
 </head>
@@ -51,14 +66,19 @@
     <div id="menu">
         <button class="startButton" id="flashButton">Flash</button>
         <div id="colors">
-            <button class="startButton" id="colorPickerButton">RGB</button>
-            <button class="startButton2" id="colorPickerButton2">C</button>
+            <button class="startButton" id="colorPickerButton2">RGB</button>
         </div>
         <button class="startButton" id="randomColorButton">Random Color</button>
         <button class="startButton" id="vibrationButton">Vibration</button>
         <button class="startButton" id="musicButton_1">Music 1</button>
         <button class="startButton" id="musicButton_2">Music 2</button>
-        <button class="startButton" id="textButton">Text</button>
+        <button class="startButton" id="imagesButton">Images</button>
+        <div>
+            <button class="startButton" id="textButton">Text</button>
+            <input type="text" id="textField" placeholder="Enter text here">
+        </div>
+        <label  id="textLabel"  class="text_sent" for="textField">Enter your text:</label>
+
         <!-- Color Picker input with predefined color options -->
         <input type="color" id="colorPicker" list="colorOptions" style="display: none;">
         <datalist id="colorOptions">

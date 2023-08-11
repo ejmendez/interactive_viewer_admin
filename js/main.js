@@ -2,15 +2,22 @@
 const colorPicker = document.getElementById('colorPicker');
 
 // Get the color picker and its related buttons
-const colorButton       = document.getElementById('colorPickerButton');
 const selectColorButton = document.getElementById('colorPickerButton2');
 
 // Get the "Flash," "Vibration," and "Music" buttons
 const flashButton = document.getElementById('flashButton');
 const vibrationButton = document.getElementById('vibrationButton');
+
 const musicButton_1 = document.getElementById('musicButton_1');
+const musicButton_2 = document.getElementById('musicButton_2');
+
+const imagesButton = document.getElementById('imagesButton');
 
 const randomColorButton = document.getElementById('randomColorButton');
+
+const textButton = document.getElementById('textButton');
+const textField = document.getElementById("textField");
+const textLabel = document.getElementById('textLabel');
 
 let selectedColorRGB = 0;
 
@@ -20,12 +27,16 @@ let music1_status       = 0;
 let random_color_status = 0;
 let flash_status        = 0;
 let vibration_status    = 0;
+let text_status         = 0;
 
+let r = 0;
+let g = 0;
+let b = 0;
 
 const intervalId = {};
 
-let flash_intervalId; // Variable to hold the interval ID
-let vibration_intervalId; // Variable to hold the interval ID
+let inputValue = "";
+
 
 connectWebSocket();
 
@@ -37,11 +48,11 @@ function flashAction() {
     if(flash_status == 0) {
         flash_status = 1;
          // Implement the music functionality here
-        intervalId["flash"] = setInterval(() => sendValue("0,0,0,255"), 1000)
+        intervalId["flash"] = setInterval(() => sendValue(`${r},${g},${b},255`), 1000)
     } else {
         flash_status = 0;
         clearInterval(intervalId["flash"]); // Stop the task
-        sendValue("0,0,0,0")
+        sendValue(`${r},${g},${b},0`)
     }
 }
 
@@ -53,7 +64,7 @@ function vibrationAction() {
     if(vibration_status == 0) {
         vibration_status = 1;
          // Implement the music functionality here
-        intervalId["vibration"] = setInterval(() => sendValue("0,0,0,10"), 1000)
+        intervalId["vibration"] = setInterval(() => sendValue(`${r},${g},${b},10`), 1000)
     } else {
         vibration_status = 0;
         clearInterval(intervalId["vibration"]); // Stop the task
@@ -61,24 +72,71 @@ function vibrationAction() {
 }
 
 
+function textAction() {
+
+    console.log("Text!");
+
+    if(text_status == 0) {
+        text_status = 1;
+        var text_to_send = inputValue;
+        textLabel.textContent = text_to_send;
+
+        // Implement the music functionality here
+        intervalId["text"] = setInterval(() => sendValue(`${text_to_send},${g},${b},5`), 1000)
+    } else {
+        text_status = 0;
+        textLabel.textContent = "";
+        clearInterval(intervalId["text"]); // Stop the task
+    }
+}
+
+
 // Function to perform the "Music" action
-function musicAction() {
+function musicAction_1() {
 
     console.log("Music 1!");
 
     if(music1_status == 0) {
         music1_status = 1;
-        intervalId["music1"] = setInterval(() => sendValue("0,0,0,70"), 3000)
+        intervalId["music1"] = setInterval(() => sendValue(`${r},${g},${b},70`), 3000)
     } else {
         music1_status = 0;
         clearInterval(intervalId["music1"]); // Stop the task
     }
 }
 
+// Function to perform the "Music" action
+function musicAction_2() {
+
+    console.log("Music 2!");
+
+    if(music1_status == 0) {
+        music1_status = 1;
+        intervalId["music2"] = setInterval(() => sendValue(`${r},${g},${b},80`), 3000)
+    } else {
+        music1_status = 0;
+        clearInterval(intervalId["music2"]); // Stop the task
+    }
+}
+
+// Function to perform the "Music" action
+function imagesAction() {
+
+    console.log("Images!");
+
+    if(music1_status == 0) {
+        music1_status = 1;
+        intervalId["images"] = setInterval(() => sendValue(`${r},${g},${b},60`), 3000)
+    } else {
+        music1_status = 0;
+        clearInterval(intervalId["images"]); // Stop the task
+    }
+}
+
 function randomColorAction() {
     if(random_color_status == 0) {
         random_color_status = 1;
-        intervalId["randomColor"] = setInterval(() => sendValue("0,0,0,50"), 1000)
+        intervalId["randomColor"] = setInterval(() => sendValue(`${r},${g},${b},50`), 1000)
     } else {
         random_color_status = 0;
         clearInterval(intervalId["randomColor"]); // Stop the task
@@ -121,12 +179,7 @@ window.addEventListener('load', function () {
     });
 
 
-    // Add click event listener to the "RGB Color" button
-    colorButton.addEventListener('click', function () {
-        rgbAction();
-    });
-
-    // Add click event listener to the small "Select Color" button
+     // Add click event listener to the small "Select Color" button
     selectColorButton.addEventListener('click', function () {
         colorPicker.click(); // Trigger the color picker dialog
     });
@@ -135,7 +188,6 @@ window.addEventListener('load', function () {
     colorPicker.addEventListener('change', function () {
         const selectedColor                = this.value;
         selectColorButton.style.background = selectedColor;
-        selectColorButton.style.color      = selectedColor;
     });
 
     // Add click event listener to the "Flash" button
@@ -150,8 +202,27 @@ window.addEventListener('load', function () {
 
     // Add click event listener to the "Music" button
     musicButton_1.addEventListener('click', function () {
-        musicAction();
+        musicAction_1();
     });
+
+    // Add click event listener to the "Music" button
+    musicButton_2.addEventListener('click', function () {
+        musicAction_2();
+    });
+
+       // Add click event listener to the "Music" button
+    imagesButton.addEventListener('click', function () {
+        imagesAction();
+    });
+
+    textButton.addEventListener('click', function () {
+        textAction();
+    });
+
+    textField.addEventListener("input", function(event) {
+        inputValue = event.target.value;
+    });
+
 
     // Add click event listener to the "Music" button
     randomColorButton.addEventListener('click', function () {
@@ -192,15 +263,18 @@ function connectWebSocket() {
       document.body.style.backgroundColor = "black";
     };
 
+
+    socket.addEventListener('message', function (event) {
+        console.log('data ', event.data);
+    });
 }
 
 // Function to convert hexadecimal color to RGB format
 function hexToRgb(hex) {
     const bigint = parseInt(hex.substring(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return { r, g, b };
+    r = (bigint >> 16) & 255;
+    g = (bigint >> 8) & 255;
+    b = bigint & 255;
 }
 
 // Event listener to handle color changes
@@ -209,6 +283,5 @@ colorPicker.addEventListener('input', () => {
     const selectedColorHex = colorPicker.value;
 
     // Convert the hexadecimal color to RGB format
-    selectedColorRGB = hexToRgb(selectedColorHex);
-    console.log('Selected RGB Color:', selectedColorRGB);
+    hexToRgb(selectedColorHex);
 });
