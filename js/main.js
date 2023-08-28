@@ -24,6 +24,8 @@ let selectedColorRGB = 0;
 let socket = "";
 
 let music1_status       = 0;
+let music2_status       = 0;
+
 let random_color_status = 0;
 let flash_status        = 0;
 let vibration_status    = 0;
@@ -110,11 +112,11 @@ function musicAction_2() {
 
     console.log("Music 2!");
 
-    if(music1_status == 0) {
-        music1_status = 1;
+    if(music2_status == 0) {
+        music2_status = 1;
         intervalId["music2"] = setInterval(() => sendValue(`${r},${g},${b},80`), 3000)
     } else {
-        music1_status = 0;
+        music2_status = 0;
         clearInterval(intervalId["music2"]); // Stop the task
     }
 }
