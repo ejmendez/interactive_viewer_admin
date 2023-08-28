@@ -19,6 +19,9 @@ const textButton = document.getElementById('textButton');
 const textField = document.getElementById("textField");
 const textLabel = document.getElementById('textLabel');
 
+imagesButton.style.display = "none";
+
+
 let selectedColorRGB = 0;
 
 let socket = "";
